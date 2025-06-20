@@ -1,5 +1,5 @@
 ---
-title:  "KVM - kvm_arch_init"
+title:  "KVM - kvm_arm_init"
 
 categories:
   - KVM
@@ -12,13 +12,8 @@ toc_sticky: true
 date: 2025-06-20
 last_modified_at: 2025-06-20
 ---
-
-(1) hypervisor mode 확인
-(2) system register table 초기화
-
----
 ### (1) hypervisor mode 확인
-```C
+```c
 // arch/arm64/kvm/arm.c
 2768 /* Initialize Hyp-mode and memory mappings on all CPUs */                       
 2769 static __init int kvm_arm_init(void)                                            
