@@ -39,3 +39,30 @@ last_modified_at: 2025-06-20
     - nested: KVM_MODE_NV
 
 ### (2) system register table 초기화
+```c
+// arch/arm64/kvm/arm.c
+2784         err = kvm_sys_reg_table_init();                                         
+2785         if (err) {                                                              
+2786                 kvm_info("Error initializing system register tables");          
+2787                 return err;                                                     
+2788         }                                                                       
+2789                                                                                 
+2790         in_hyp_mode = is_kernel_in_hyp_mode();                                  
+2791                                                                                 
+2792         if (cpus_have_final_cap(ARM64_WORKAROUND_DEVICE_LOAD_ACQUIRE) ||        
+2793             cpus_have_final_cap(ARM64_WORKAROUND_1508412))                      
+2794                 kvm_info("Guests without required CPU erratum workarounds can deadlock system!\n" \
+2795                          "Only trusted guests should be used on this system.\n");
+2796          
+```
+- 2784: system register들에 대한 table이 유효한지 확인하고, reset하거나 sr_forward_xa에 store한다.
+  - table 유효 확인 항목
+    - sys_reg_descs
+    - cp14_regs, cp14_64_regs: debug 관련 coprocessor register
+    - cp15_regs, cp15_64_regs: system 관련(mmu enable, 등..) coprocessor register
+    - invariant_sys_regs
+    - sys_insn_descs
+  - invariant_sys_regs는 reset 함수를 호출한다.
+  - CGT(Coarse Grained Trap), FGT(Fine Grained Trap) 레지스터에 대한 trap_config를 sr_forward_xa에 store한다.
+  - 또한, sys_reg_descs, sys_insn_descs 레지스터 trap_config도 sr_forward_xa에 store한다.
+    - sr_forward_xa는 xarray 구조체로 레지스터 op-code를 key 값으로 trap_config의 object 주소를 관리한다.
