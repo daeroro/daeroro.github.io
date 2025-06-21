@@ -17,3 +17,16 @@ $sans-serif-narrow  : "Inconsolata", monospace, "PT Sans Narrow", -apple-system,
 $global-font-family : $serif;
 $header-font-family : $sans-serif-narrow;
 $caption-font-family: $serif !default;
+
+html {
+  font-size: 16px; // 기본 글자 크기를 16px로 설정
+  @include breakpoint($medium) {
+    font-size: 16px; // 중간 화면 크기에서도 16px
+  }
+  @include breakpoint($large) {
+    font-size: 16px; // 큰 화면 크기에서도 16px
+  }
+  @include breakpoint($x-large) {
+    font-size: 16px; // 아주 큰 화면 크기에서도 16px
+  }
+}

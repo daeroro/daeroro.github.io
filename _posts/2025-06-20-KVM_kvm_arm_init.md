@@ -66,3 +66,6 @@ last_modified_at: 2025-06-20
   - CGT(Coarse Grained Trap), FGT(Fine Grained Trap) 레지스터에 대한 trap_config를 sr_forward_xa에 store한다.
   - 또한, sys_reg_descs, sys_insn_descs 레지스터 trap_config도 sr_forward_xa에 store한다.
     - sr_forward_xa는 xarray 구조체로 레지스터 op-code를 key 값으로 trap_config의 object 주소를 관리한다.
+
+- 2790: is_kernel_in_hyp_mode()함수는 현재 EL이 EL2이면 true, 아니면 false를 return한다.
+  - \__KVM_NVHE_HYPERVISOR__, __KVM_NVHE_HYPERVISOR__이 define 되어 있으면 빌드 실패하도록 되어 있는데, 이것은 이 함수가 EL1에서만 호출되도록 하는 의도이다. EL2에서 호출하면 빌드 실패한다.
